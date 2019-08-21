@@ -45,7 +45,41 @@
   - When eating an edible, it should be pushed into a "stomach" property which is an array.
   - Give persons the ability to poop.
   - When pooping, the stomach should empty.
+*/
+let stomach = [];
+function person (name,  age)  {
+    this.name = name;
+    this.age = age;
+    this.eating = false;
+    this.pooping = false;
+}
 
+person.prototype.greet = function ()  {
+  return `My name is ${this.name}, my age is ${this.age}`
+}
+
+person.prototype.eat = function ()  {
+    this.edibles = ["apples", "meat", "vegetables"];
+   stomach = stomach.concat(this.edibles);
+   this.eating = true;
+  return `You can eat ${this.edibles}`;
+}
+
+person.prototype.poop = function () {
+        this.stomach = [0];
+        this.pooping = true;
+   return `Your stomach level is now ${this.stomach}`;
+}
+ 
+const effie = new person ("Effie", 21);
+
+console.log(effie);                 //person {name: "Effie", age: 21, eating: false, pooping: false}
+console.log(effie.greet());         //My name is Effie, my age is 21
+console.log(effie.eat());          // You can eat apples,meat,vegetables
+console.log(effie.eating);        // true
+console.log(effie.poop());        //Your stomach level is now 0
+
+/*
   TASK 2
 
   - Build a Car constructor that takes model name and make.
@@ -55,13 +89,72 @@
   - A crashed car can't be driven any more. Attempts return a string "I crashed at x miles!", x being the miles in the odometer.
   - Give cars the ability to be repaired.
   - A repaired car can be driven again.
+  */
 
+  function carMaker (model, make) {
+    this.model = model;
+    this.make = make;
+    this.distance = 0;
+    this.odometer = 0;
+  }
+
+carMaker.prototype.drive = function(distance) {
+      this.distance = distance;
+      this.odometer +=  this.distance;  
+      return `This ${this.model} ${this.make} car has been driven for ${this.odometer} miles`;
+}
+
+carMaker.prototype.crash = function(distance) {
+  this.distance = distance;
+  this.odometer += this.distance;
+  return ` This ${this.model} ${this.make} car crashed at ${this.odometer} miles`;
+}
+
+carMaker.prototype.repair = function () {
+    // this.drive();
+    return `${this.drive('')}, This car has been repaired and can now be driven `;
+}
+
+let Tesla = new carMaker("Tesla", "Model S");
+console.log(Tesla.drive(20));       //This car has been driven for 20 miles
+console.log(Tesla.crash(''));       //This car crashed at 60 miles
+console.log(Tesla.repair());        //This Tesla Model S car has been driven for 20 miles, This car has been repaired and can now be driven 
+
+ /*
   TASK 3
 
   - Build a Baby constructor that subclasses the Person built earlier.
   - Babies of course inherit the ability to greet, which can be strange.
   - Babies should have the ability to play, which persons don't.
   - By playing, a string is returned with some text of your choosing.
+
+  */
+
+  function baby (name, age) {
+
+    person.call(this, name, age);
+
+  }
+
+  baby.prototype = Object.create(person.prototype);
+
+   let malkia = new baby ("Malkia", "2");
+
+   baby.prototype.greet = function () {
+
+    return `Hi! my name is ${this.name}`;
+   }
+
+   baby.prototype.play = function () {
+
+    return ` I spend most of my days playing!`;
+   }
+   console.log(malkia.greet());
+   console.log(malkia.play());
+   console.log(malkia.eat());
+   console.log(malkia.poop());
+
+ /*
 
   TASK 4
 
@@ -70,7 +163,42 @@
   complicated one with lots of state. Surprise us!
 
 */
+ const patient_history = [{patient_id: 1, name: "Mild", last_visit: "31/12/18", disease_history: "malaria, common cold, flur"},
+                          {patient_id: 2, name: " Furaha ", last_visit: "31/12/17", disease_history: "malaria, common cold, flur"} 
+];
 
+
+function hospital (hospitalName, hospitalLocation, ) {
+
+  this.name = hospitalName;
+  this.location = hospitalLocation;
+  this.department = hospitalDepartment;
+
+  return `This hospital is called ${this.name} located in ${this.location}`
+  
+}
+
+function departmentCall (doctor, waiting, hospitalDepartment) {
+    hospital.call(this, hospitalName, hospitalLocation);
+   this.doctor = doctor;
+   this.waiting = waiting;
+    return `${this.doctor} is on call today for ${this.department}, the waiting time is ${this.waiting} minutes`;
+
+}
+
+obgyn.prototype = Object.create(hospital.prototype);
+
+hospital.prototype.visit = function ( patient_name, patient_id){
+  this.patient_name = patient_history.patient_name;
+  this.patient_id = patient_history.patient_id;
+  this.patient_ind_history = patient_history.map ((patient) => patient_history.patient_id );
+
+  return ` ${this.patient_name} of ${this.patient_id}, The patients history is ${this.patient_history} and payment information is `
+}
+
+let kijabe = new hospital ("Kijabe", "Nairobi", "OBGYN",);
+
+console.log (kijabe.obgyn ("Dr Heri", "20"));
 /*
 
   STRETCH TASK
